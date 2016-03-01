@@ -19,9 +19,10 @@ namespace Feed_your_cat_
         Cat[] CatArray = new Cat[4];
         MyMath myMath = new MyMath();
         //public string newCatName;
-        int Food;
-        int Score;
-        int Highscore;
+        int food;
+        decimal score;
+        decimal highscore;
+        int time;
         
         public Form1()
         {
@@ -30,9 +31,10 @@ namespace Feed_your_cat_
             CatArray[1] = new Cat() { MyLabel = hungerLabel2, MyPictureBox = pictureBox2, Normal = global::Feed_your_cat_.Properties.Resources.cat_blue, Starved = global::Feed_your_cat_.Properties.Resources.starved_blue, Hungry = global::Feed_your_cat_.Properties.Resources.hungry_blue, Full = global::Feed_your_cat_.Properties.Resources.full_blue, Boom = global::Feed_your_cat_.Properties.Resources.boom_blue };
             CatArray[2] = new Cat() { MyLabel = hungerLabel3, MyPictureBox = pictureBox3, Normal = global::Feed_your_cat_.Properties.Resources.cat_grey, Starved = global::Feed_your_cat_.Properties.Resources.starved_grey, Hungry = global::Feed_your_cat_.Properties.Resources.hungry_grey, Full = global::Feed_your_cat_.Properties.Resources.full_grey, Boom = global::Feed_your_cat_.Properties.Resources.boom_grey };
             CatArray[3] = new Cat() { MyLabel = hungerLabel4, MyPictureBox = pictureBox4, Normal = global::Feed_your_cat_.Properties.Resources.cat_brown, Starved = global::Feed_your_cat_.Properties.Resources.starved_brown, Hungry = global::Feed_your_cat_.Properties.Resources.hungry_brown, Full = global::Feed_your_cat_.Properties.Resources.full_brown, Boom = global::Feed_your_cat_.Properties.Resources.boom_brown };
-            Food = 25;
-            Score = 0;
-            Highscore = 0;
+            food = 25;
+            score = 0M;
+            highscore = 0M;
+            time = 0;
             myMath.generateProblem(mathQuestionLabel);
             updateLabels();
 
@@ -52,7 +54,8 @@ namespace Feed_your_cat_
             {
                 CatArray[i].UpdateLabels();
             }
-            foodLabel.Text = "Food\n" + Food;
+            foodLabel.Text = "Food\n" + food;
+            scoreLabel.Text = "Score: " + score;
             //this is for the warning label
             if (stopWatch.ElapsedMilliseconds > 500)
             {
@@ -69,6 +72,65 @@ namespace Feed_your_cat_
             }
             
         }
+        private decimal updateScore()
+        {
+            decimal newScore = 0M;
+            int catsAlive = 0;
+            for (int i = 0; i < CatArray.Length; i++)
+            {
+                if (CatArray[i].Status == "hungry")
+                {
+                    newScore += 1M;
+                    catsAlive += 1;
+                }
+                if (CatArray[i].Status == "normal")
+                {
+                    newScore += 2M;
+                    catsAlive += 1;
+                }
+                if (CatArray[i].Status == "full")
+                {
+                    newScore += 4M;
+                    catsAlive += 1;
+                }
+            }
+            if (catsAlive == 0)
+            {
+                scorePerTickLabel.Text = "Score per tick: " + 0;
+                return 0M;
+            }
+            if (catsAlive == 4)
+            {
+                scorePerTickLabel.Text = "Score per tick: " + newScore + " (x1.50)";
+                return newScore * 1.5M;
+            }
+            if (catsAlive == 3)
+            {
+                scorePerTickLabel.Text = "Score per tick: " + newScore + " (x1.25)";
+                return newScore * 1.25M;
+            }
+            if (catsAlive == 2)
+            {
+                scorePerTickLabel.Text = "Score per tick: " + newScore + " (x1.12)";
+                return newScore * 1.12M;
+            }
+            else
+            {
+                scorePerTickLabel.Text = "Score per tick: " + newScore + " (x1.00)";
+                return newScore;
+            }
+        }
+        private bool gameOver()
+        {
+            if (CatArray[0].IsAlive() || CatArray[1].IsAlive() || CatArray[2].IsAlive() || CatArray[3].IsAlive())
+            {
+                return false;
+            }
+            else
+            {
+                return true;
+            }
+        }
         public void ShowLabel(Label label, string text, Color color)
         {
             label.Visible = true;
@@ -77,13 +139,13 @@ namespace Feed_your_cat_
         }
         private void feedCat(int i)
         {
-            if (Food > 0)
+            if (food > 0)
             {
                 if (CatArray[i].IsAlive())
                 {
                     CatArray[i].FeedCat(10);
                     CatArray[i].UpdateStatus();
-                    Food -= 1;
+                    food -= 1;
                     updateLabels();
                 }
                 else
@@ -113,7 +175,7 @@ namespace Feed_your_cat_
                         stopWatch2.Start();
                         myMath.generateProblem(mathQuestionLabel);
                         textBox1.Text = "";
-                        Food += 1;
+                        food += 3;
                     }
                     else
                     {
@@ -160,7 +222,19 @@ namespace Feed_your_cat_
                     }
                 }
             }
+            score += updateScore();
             updateLabels();
+            if (gameOver())
+            {
+                mainTimer.Stop();
+                gameTimer.Stop();
+                if (score > highscore)
+                {
+                    highscore = score;
+                    highscoreLabel.Text = "Highscore: " + score;
+                }
+                MessageBox.Show("Score: " + score, "Game Over");
+            }
         }
 
         private void feedButton1_Click(object sender, EventArgs e)
@@ -188,8 +262,26 @@ namespace Feed_your_cat_
             if (mainTimer.Interval > 50)
             {
                 mainTimer.Interval -= 1;
+                progressBar1.Value = 1050 - mainTimer.Interval;
             }
-            progressBar1.Value = 1000 - mainTimer.Interval;
+            time += 1;
+            timeLabel.Text = "Time: " + time;
+        }
+
+        private void resetButton_Click(object sender, EventArgs e)
+        {
+            CatArray[0] = new Cat() { MyLabel = hungerLabel1, MyPictureBox = pictureBox1, Normal = global::Feed_your_cat_.Properties.Resources.cat, Starved = global::Feed_your_cat_.Properties.Resources.starved, Hungry = global::Feed_your_cat_.Properties.Resources.hungry, Full = global::Feed_your_cat_.Properties.Resources.full, Boom = global::Feed_your_cat_.Properties.Resources.boom };
+            CatArray[1] = new Cat() { MyLabel = hungerLabel2, MyPictureBox = pictureBox2, Normal = global::Feed_your_cat_.Properties.Resources.cat_blue, Starved = global::Feed_your_cat_.Properties.Resources.starved_blue, Hungry = global::Feed_your_cat_.Properties.Resources.hungry_blue, Full = global::Feed_your_cat_.Properties.Resources.full_blue, Boom = global::Feed_your_cat_.Properties.Resources.boom_blue };
+            CatArray[2] = new Cat() { MyLabel = hungerLabel3, MyPictureBox = pictureBox3, Normal = global::Feed_your_cat_.Properties.Resources.cat_grey, Starved = global::Feed_your_cat_.Properties.Resources.starved_grey, Hungry = global::Feed_your_cat_.Properties.Resources.hungry_grey, Full = global::Feed_your_cat_.Properties.Resources.full_grey, Boom = global::Feed_your_cat_.Properties.Resources.boom_grey };
+            CatArray[3] = new Cat() { MyLabel = hungerLabel4, MyPictureBox = pictureBox4, Normal = global::Feed_your_cat_.Properties.Resources.cat_brown, Starved = global::Feed_your_cat_.Properties.Resources.starved_brown, Hungry = global::Feed_your_cat_.Properties.Resources.hungry_brown, Full = global::Feed_your_cat_.Properties.Resources.full_brown, Boom = global::Feed_your_cat_.Properties.Resources.boom_brown };
+            food = 25;
+            score = 0M;
+            time = 0;
+            mainTimer.Interval = 1000;
+            myMath.generateProblem(mathQuestionLabel);
+            updateLabels();
+            mainTimer.Start();
+            gameTimer.Start();
         }
     }
 }

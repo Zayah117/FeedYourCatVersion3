@@ -95,7 +95,6 @@ namespace Feed_your_cat_
         {
             if (Status == "starved" || Status == "boom")
             {
-                //DeclaredDead = true;
                 alive = false;
                 return false;
             }

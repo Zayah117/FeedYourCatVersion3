@@ -56,6 +56,11 @@
             this.progressBar1 = new System.Windows.Forms.ProgressBar();
             this.gameTimer = new System.Windows.Forms.Timer(this.components);
             this.label1 = new System.Windows.Forms.Label();
+            this.scoreLabel = new System.Windows.Forms.Label();
+            this.scorePerTickLabel = new System.Windows.Forms.Label();
+            this.timeLabel = new System.Windows.Forms.Label();
+            this.resetButton = new System.Windows.Forms.Button();
+            this.highscoreLabel = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox4)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
@@ -66,7 +71,7 @@
             // 
             this.creatorLabel.AutoSize = true;
             this.creatorLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.creatorLabel.Location = new System.Drawing.Point(733, 526);
+            this.creatorLabel.Location = new System.Drawing.Point(731, 526);
             this.creatorLabel.Name = "creatorLabel";
             this.creatorLabel.Size = new System.Drawing.Size(259, 13);
             this.creatorLabel.TabIndex = 22;
@@ -312,11 +317,13 @@
             // 
             // progressBar1
             // 
-            this.progressBar1.Location = new System.Drawing.Point(818, 394);
-            this.progressBar1.Maximum = 950;
+            this.progressBar1.Location = new System.Drawing.Point(572, 394);
+            this.progressBar1.Maximum = 1000;
+            this.progressBar1.Minimum = 50;
             this.progressBar1.Name = "progressBar1";
             this.progressBar1.Size = new System.Drawing.Size(172, 23);
             this.progressBar1.TabIndex = 43;
+            this.progressBar1.Value = 50;
             // 
             // gameTimer
             // 
@@ -326,18 +333,73 @@
             // label1
             // 
             this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.Location = new System.Drawing.Point(752, 394);
+            this.label1.Location = new System.Drawing.Point(506, 394);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(60, 23);
             this.label1.TabIndex = 44;
             this.label1.Text = "Speed";
-            this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // scoreLabel
+            // 
+            this.scoreLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.scoreLabel.Location = new System.Drawing.Point(506, 420);
+            this.scoreLabel.Name = "scoreLabel";
+            this.scoreLabel.Size = new System.Drawing.Size(238, 40);
+            this.scoreLabel.TabIndex = 45;
+            this.scoreLabel.Text = "Score";
+            this.scoreLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // scorePerTickLabel
+            // 
+            this.scorePerTickLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.scorePerTickLabel.Location = new System.Drawing.Point(506, 460);
+            this.scorePerTickLabel.Name = "scorePerTickLabel";
+            this.scorePerTickLabel.Size = new System.Drawing.Size(238, 33);
+            this.scorePerTickLabel.TabIndex = 46;
+            this.scorePerTickLabel.Text = "Score per tick: 0";
+            this.scorePerTickLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // timeLabel
+            // 
+            this.timeLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.timeLabel.Location = new System.Drawing.Point(506, 493);
+            this.timeLabel.Name = "timeLabel";
+            this.timeLabel.Size = new System.Drawing.Size(196, 40);
+            this.timeLabel.TabIndex = 47;
+            this.timeLabel.Text = "Time";
+            this.timeLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // resetButton
+            // 
+            this.resetButton.Location = new System.Drawing.Point(898, 493);
+            this.resetButton.Name = "resetButton";
+            this.resetButton.Size = new System.Drawing.Size(92, 27);
+            this.resetButton.TabIndex = 48;
+            this.resetButton.Text = "Reset Game";
+            this.resetButton.UseVisualStyleBackColor = true;
+            this.resetButton.Click += new System.EventHandler(this.resetButton_Click);
+            // 
+            // highscoreLabel
+            // 
+            this.highscoreLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.highscoreLabel.Location = new System.Drawing.Point(734, 493);
+            this.highscoreLabel.Name = "highscoreLabel";
+            this.highscoreLabel.Size = new System.Drawing.Size(158, 27);
+            this.highscoreLabel.TabIndex = 49;
+            this.highscoreLabel.Text = "Highscore: 0";
+            this.highscoreLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1004, 548);
+            this.Controls.Add(this.highscoreLabel);
+            this.Controls.Add(this.resetButton);
+            this.Controls.Add(this.timeLabel);
+            this.Controls.Add(this.scorePerTickLabel);
+            this.Controls.Add(this.scoreLabel);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.progressBar1);
             this.Controls.Add(this.warningLabel);
@@ -365,7 +427,7 @@
             this.Controls.Add(this.pictureBox1);
             this.MaximizeBox = false;
             this.Name = "Form1";
-            this.Text = "Feed Your Cat! Version 3.0";
+            this.Text = "Feed Your Cat! Version 3.1";
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox4)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).EndInit();
@@ -404,6 +466,11 @@
         private System.Windows.Forms.ProgressBar progressBar1;
         private System.Windows.Forms.Timer gameTimer;
         private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Label scoreLabel;
+        private System.Windows.Forms.Label scorePerTickLabel;
+        private System.Windows.Forms.Label timeLabel;
+        private System.Windows.Forms.Button resetButton;
+        private System.Windows.Forms.Label highscoreLabel;
     }
 }
 
